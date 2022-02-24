@@ -1,6 +1,7 @@
 package com.gestion.usuarios.repositorio;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -30,12 +31,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 	 * @return the list
 	 */
 	List<Image> findByTitle(String title);
-	
-	/**
-	 * Find by id.
-	 *
-	 * @param id the id
-	 * @return the optional
-	 */
-	public Image findByIdImage(Long idImage);
+
 }
