@@ -3,8 +3,12 @@ package com.gestion.usuarios.controlador;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gestion.usuarios.excepciones.ResourceNotFoundException;
@@ -49,8 +54,8 @@ public class UsuarioControlador {
 			return ResponseEntity.ok(usuario);
 	}
 	
-	//este metodo sirve para actualizar empleado
-		@PutMapping("/empleados/{id}")
+	//este metodo sirve para actualizar usuario
+		@PutMapping("/usuarios/{id}")
 		public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id,@RequestBody Usuario detallesUsuario){
 			Usuario usuario = repositorio.findById(id)
 					            .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario con el ID : " + id));
@@ -74,6 +79,30 @@ public class UsuarioControlador {
 		respuesta.put("eliminar",Boolean.TRUE);
 		return ResponseEntity.ok(respuesta);
     }
+	
+	
+	@GetMapping("/login")
+	public ResponseEntity<Usuario> checkUser(@RequestParam String username, @RequestParam String password) {
+		Optional<Usuario> user = repositorio.findByNombre(username);
+		
+		if (user.isPresent() && user.get().getPassword().equals(password)) {
+			return new ResponseEntity<>(user.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
+	@PostMapping("/register")
+	public ResponseEntity<Usuario> register(@Valid @RequestBody Usuario user){
+		try {
+			repositorio.save(user);
+			return new ResponseEntity<>(user, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 }
 
 

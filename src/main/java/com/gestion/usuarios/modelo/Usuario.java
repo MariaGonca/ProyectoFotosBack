@@ -24,16 +24,20 @@ public class Usuario {
 	@Column(name = "email", length = 60, nullable = false, unique = true)
 	private String email;
 
+	@Column(name = "email", length = 60, nullable = false, unique = true)
+	private String password;
+
 	public Usuario() {
 
 	}
 
-	public Usuario(Long id, String nombre, String apellido, String email) {
+	public Usuario(Long id, String nombre, String apellido, String email, String password) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.email = email;
+		this.password = password;
 	}
 
 	public Long getId() {
@@ -66,6 +70,14 @@ public class Usuario {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
